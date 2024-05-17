@@ -42,9 +42,22 @@ The Dockerfile in .docker creates a docker container that runs phoenixd and uses
 1. Open terminal and cd to .docker
 1. Copy .env.example to .env and update the vars accordingly
 1. Build and run the container using docker compose `docker compose up --build`
-1.The previous command will include the pubkey of your phoenixd docker container. Add this to the .ssh/authorized_hosts file of your ssh server.
-1. Stop and restart the docker container.
+1. The previous command will include the pubkey of your phoenixd docker container. Add this to the .ssh/authorized_hosts file of your ssh server.
+1. Stop the docker container by CTRL-Cing, then start the docker container with `docker compose up -d`.
 1. Get the http-password by running `docker exec docker-phoenixd cat .phoenix/phoenix.conf`
+
+#### Other useful things
+
+Get the BIP39 seed phrase
+
+`docker exec docker-phoenixd-1 cat .phoenix/seed.dat`
+
+Make a backup of the .phoenixd directory
+
+`docker exec docker-phoenixd-1 tar cpzf phoenix.tar.gz .phoenix`
+
+`docker container cp docker-phoenixd-1:/phoenix/phoenix.tar.gz ~/`
+
 
 #### LNbits
 If using LNbits, use this funding source by setting your LNbits funding source to

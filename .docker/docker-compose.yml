@@ -1,8 +1,8 @@
-version: '3'
 services:
   phoenixd:
     build:
       context: .
+    restart: unless-stopped
     env_file:
       - .env
     ports:
