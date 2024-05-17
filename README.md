@@ -32,3 +32,25 @@ Requires `libsqlite-dev` and `libcurl4-gnutls-dev`, both compiled against `glibc
 ```shell
 ./gradlew distZip
 ```
+
+## Docker file with ssh tunnel to a remote server
+
+The Dockerfile in .docker creates a docker container that runs phoenixd and uses autossh to establish a reverse ssh tunnel to a remote server.
+
+### Instructions for use
+
+1. Open terminal and cd to .docker
+1. Build the image `docker build -t phoenixd .`
+1. Run the container `docker run --name phoenixd-container -p 9740:9740 phoenixd  -e REMOTE_HOST='example.com' -e REMOTE_PORT='9740' -e SSH_USER='sshuser' phoenixd-image .` replacing the vars with your own ssh server preferences
+1. `docker logs phoenixd-container`  this will give you the pubkey of your docker container. Add this to the .ssh/authorized_hosts file of your ssh server.
+1. Stop and restart the docker container `CTRL-D` then `docker start phoenixd-container`
+1. Get the http-password by running `docker exec phoenixd-container cat .phoenix/phoenix.conf`
+
+#### LNbits
+If using LNbits, use this funding source by setting your LNbits funding source to
+
+PhoenixdWallet
+
+Endpoint: http://localhost:9740
+
+Key: The http-password value above

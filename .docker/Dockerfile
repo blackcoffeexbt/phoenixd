@@ -24,7 +24,7 @@ FROM eclipse-temurin:21-jre-alpine as FINAL
 # Upgrade all packages and install dependencies
 RUN apk update \
     && apk upgrade --no-interactive
-RUN apk add --update --no-cache bash
+RUN apk add --update --no-cache bash openssh-client autossh
 
 # Create a phoenix group and user
 RUN addgroup -S phoenix -g 1000 \
@@ -42,5 +42,14 @@ EXPOSE 9740
 # Expose default data directory as VOLUME
 VOLUME [ "/phoenix" ]
 
-# Run the daemon
-ENTRYPOINT ["/phoenix/bin/phoenixd", "--agree-to-terms-of-service", "--http-bind-ip", "0.0.0.0"]
+# Environment variables for SSH tunnel
+ENV REMOTE_HOST=example.com
+ENV REMOTE_PORT=9740
+ENV SSH_USER=sshuser
+
+# Add the startup script
+COPY startup.sh /usr/local/bin/startup.sh
+# RUN chmod +x /usr/local/bin/startup.sh
+
+# Run the daemon with SSH tunnel setup
+ENTRYPOINT ["/usr/local/bin/startup.sh"]
