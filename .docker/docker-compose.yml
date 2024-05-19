@@ -7,3 +7,5 @@ services:
       - .env
     ports:
       - "9740:9740"
+    volumes:
+      - ./phoenix-data:/phoenix/.phoenix

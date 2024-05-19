@@ -31,6 +31,14 @@ RUN addgroup -S phoenix -g 1000 \
     && adduser -S phoenix -G phoenix -u 1000 -h /phoenix
 USER phoenix
 
+RUN mkdir -p /phoenix/.phoenixd && \
+    chown -R phoenix:phoenix /phoenix    
+
+#  set permissions for the phoenix user
+RUN chown -R phoenix:phoenix /phoenix/.phoenixd
+# make it writable by the phoenix user
+RUN chmod -R 777 /phoenix/.phoenixd
+
 # Unpack the release
 WORKDIR /phoenix
 COPY --chown=phoenix:phoenix --from=BUILD /phoenixd/build/distributions/phoenix-*-jvm.tar .

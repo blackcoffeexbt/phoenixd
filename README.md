@@ -46,7 +46,16 @@ The Dockerfile in .docker creates a docker container that runs phoenixd and uses
 1. Stop the docker container by CTRL-Cing, then start the docker container with `docker compose up -d`.
 1. Get the http-password by running `docker exec docker-phoenixd cat .phoenix/phoenix.conf`
 
-#### Other useful things
+#### LNbits
+If using LNbits, use this funding source by setting your LNbits funding source to
+
+PhoenixdWallet
+
+Endpoint: http://localhost:9740
+
+Key: The http-password value above
+
+## Other useful things
 
 Get the BIP39 seed phrase
 
@@ -58,12 +67,5 @@ Make a backup of the .phoenixd directory
 
 `docker container cp docker-phoenixd-1:/phoenix/phoenix.tar.gz ~/`
 
-
-#### LNbits
-If using LNbits, use this funding source by setting your LNbits funding source to
-
-PhoenixdWallet
-
-Endpoint: http://localhost:9740
-
-Key: The http-password value above
+Get node info
+`docker exec docker-phoenixd-1  bin/phoenix-cli getinfo`
