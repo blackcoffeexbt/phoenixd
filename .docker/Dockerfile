@@ -31,13 +31,13 @@ RUN addgroup -S phoenix -g 1000 \
     && adduser -S phoenix -G phoenix -u 1000 -h /phoenix
 USER phoenix
 
-RUN mkdir -p /phoenix/.phoenixd && \
+RUN mkdir -p /phoenix/.phoenix && \
     chown -R phoenix:phoenix /phoenix    
 
 #  set permissions for the phoenix user
-RUN chown -R phoenix:phoenix /phoenix/.phoenixd
+RUN chown -R phoenix:phoenix /phoenix/.phoenix
 # make it writable by the phoenix user
-RUN chmod -R 777 /phoenix/.phoenixd
+RUN chmod -R 777 /phoenix/.phoenix
 
 # Unpack the release
 WORKDIR /phoenix
