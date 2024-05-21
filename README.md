@@ -41,6 +41,8 @@ The Dockerfile in .docker creates a docker container that runs phoenixd and uses
 
 1. Open terminal and cd to .docker
 1. Copy .env.example to .env and update the vars accordingly
+1. `mkdir phoenix-data`
+1. `sudo chmod 0777 -R phoenix-data`
 1. Build and run the container using docker compose `docker compose up --build`
 1. The previous command will include the pubkey of your phoenixd docker container. Add this to the .ssh/authorized_hosts file of your ssh server.
 1. Stop the docker container by CTRL-Cing, then start the docker container with `docker compose up -d`.
@@ -69,3 +71,4 @@ Make a backup of the .phoenixd directory
 
 Get node info
 `docker exec docker-phoenixd-1  bin/phoenix-cli getinfo`
+
