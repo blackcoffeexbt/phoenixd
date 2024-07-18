@@ -61,3 +61,10 @@ Key: The http-password value above
 
 Get nwc connection string
 /usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
+
+
+## Generate some keys
+
+
+## Get connection string
+docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
