@@ -59,16 +59,5 @@ Key: The http-password value above
 
 ## Other useful things
 
-Get the BIP39 seed phrase
-
-`docker exec docker-phoenixd-1 cat .phoenix/seed.dat`
-
-Make a backup of the .phoenixd directory
-
-`docker exec docker-phoenixd-1 tar cpzf phoenix.tar.gz .phoenix`
-
-`docker container cp docker-phoenixd-1:/phoenix/phoenix.tar.gz ~/`
-
-Get node info
-`docker exec docker-phoenixd-1  bin/phoenix-cli getinfo`
-
+Get nwc connection string
+/usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc

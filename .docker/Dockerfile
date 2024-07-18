@@ -2,14 +2,34 @@
 FROM eclipse-temurin:21-jdk-jammy AS BUILD
 
 # Set necessary args and environment variables for building phoenixd
-ARG PHOENIXD_BRANCH=v0.1.5
-ARG PHOENIXD_COMMIT_HASH=6845a31e6129a48e311b49402a5cc3b9bf887df2
+ARG PHOENIXD_BRANCH=v0.3.1
+ARG PHOENIXD_COMMIT_HASH=b735020e66daa01512e8fb2f47274b25916b207e
 
 # Upgrade all packages and install dependencies
 RUN apt-get update \
     && apt-get upgrade -y
-RUN apt-get install -y --no-install-recommends bash git \
+RUN apt-get install -y --no-install-recommends bash git make \
     && apt clean
+
+RUN wget https://go.dev/dl/go1.22.5.linux-amd64.tar.gz \
+&& tar -xvf go1.22.5.linux-amd64.tar.gz \
+&& mv go /usr/local
+
+# Set environment variables for Go
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/root/go
+ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+WORKDIR /satdress
+RUN git clone https://github.com/braydonf/satdress.git .
+RUN make \
+    && mkdir -p /var/local/bin \
+    && mv satdress /var/local/bin/satdress \
+    && mv satdress-cli /var/local/bin/satdress-cli \
+    && chmod +x /var/local/bin/satdress-cli \
+    && chmod +x /var/local/bin/satdress
+
+RUN ls -l /var/local/bin
 
 # Git pull phoenixd source at specified tag/branch and compile phoenixd
 WORKDIR /phoenixd
@@ -44,20 +64,21 @@ WORKDIR /phoenix
 COPY --chown=phoenix:phoenix --from=BUILD /phoenixd/build/distributions/phoenix-*-jvm.tar .
 RUN tar --strip-components=1 -xvf phoenix-*-jvm.tar
 
+# Copy satdress binaries from the BUILD stage
+COPY --from=BUILD /var/local/bin/satdress /usr/local/bin/satdress
+COPY --from=BUILD /var/local/bin/satdress-cli /usr/local/bin/satdress-cli
+
+# make directory /phoenix/.satdress/data
+RUN mkdir -p /phoenix/.satdress/data
+
 # Indicate that the container listens on port 9740
 EXPOSE 9740
 
 # Expose default data directory as VOLUME
 VOLUME [ "/phoenix" ]
 
-# Environment variables for SSH tunnel
-ENV REMOTE_HOST=example.com
-ENV REMOTE_PORT=9740
-ENV SSH_USER=sshuser
-
 # Add the startup script
 COPY startup.sh /usr/local/bin/startup.sh
-# RUN chmod +x /usr/local/bin/startup.sh
 
 # Run the daemon with SSH tunnel setup
 ENTRYPOINT ["/usr/local/bin/startup.sh"]

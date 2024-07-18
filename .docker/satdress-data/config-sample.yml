@@ -1,0 +1,66 @@
+# Server Settings
+host: localhost
+port: 8080
+domain: localhost
+siteownername: Satoshi
+siteownerurl: http://localhost
+sitename: Satdress
+
+# Log Level
+# This can be: panic, fatal, error, warn, info, debug, trace
+loglevel: "info"
+
+# Nostr Wallet Connect
+# Additional configuration options `nwcrelay` and `nwcsecret` for
+# the user will need to be added to enable it for specific users.
+# You can use `satdress-cli nwc create-secret` to create new
+# wallet connection secrets. Then use `satdress-cli nwc connect-string`
+# or `satdress-cli nwc connect-qrcode` to connect.
+nwc: true
+
+# Nostr Config
+# This should be a new key specific to this server. You can use
+# the `satdress-cli keygen` tool to create a new key.
+nostrprivatekey: 
+
+# NWC Database
+datadir: /phoenix/.satdress/data
+
+# User Configs
+users:
+  - name: nwc
+    kind: phoenix
+    host: localhost:9740
+    key: [phoenix http-password from ./phoenix-data/phoenix.conf]
+    nwcsecret: [32 byte hex, use satdress-cli keygen to generate]
+    nwcrelay: wss://relay.primal.net
+
+  # - name: alice
+  #   kind: commando
+  #   nodeid: <hex>
+  #   host: <ip:port>
+  #   rune: <base64>
+
+  # - name: bob
+  #   kind: lnd
+  #   host: <ip:port>
+  #   key: <macaroon>
+
+  # - name: eve
+  #   kind: eclair
+  #   host: <ip:port>
+
+  # - name: carlos
+  #   kind: lnpay
+  #   pak: <pak>
+  #   wak: <wak>
+
+  # - name: charlie
+  #   kind: lnbits
+  #   host: <ip:port>
+  #   key: <key>
+
+  # - name: judy
+  #   kind: sparko
+  #   host: <ip:port>
+  #   key: <key>

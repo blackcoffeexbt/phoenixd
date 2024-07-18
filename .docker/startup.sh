@@ -24,5 +24,7 @@ autossh -M 0 -fNT -R $REMOTE_PORT:localhost:9740 \
     -o "ServerAliveCountMax=3" \
     $SSH_USER@$REMOTE_HOST
 
+/usr/local/bin/satdress --conf /phoenix/.satdress/config.yml > /phoenix/logs/satdress.out 2> /phoenix/logs/satdress.err &
+
 # Start the phoenixd daemon
 exec /phoenix/bin/phoenixd --agree-to-terms-of-service --http-bind-ip "0.0.0.0"
