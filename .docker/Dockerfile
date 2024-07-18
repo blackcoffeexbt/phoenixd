@@ -69,7 +69,8 @@ COPY --from=BUILD /var/local/bin/satdress /usr/local/bin/satdress
 COPY --from=BUILD /var/local/bin/satdress-cli /usr/local/bin/satdress-cli
 
 # make directory /phoenix/.satdress/data
-RUN mkdir -p /phoenix/.satdress/data /phoenix/logs
+RUN mkdir -p /phoenix/.satdress/data
+RUN mkdir -p /phoenix/logs
 
 # Indicate that the container listens on port 9740
 EXPOSE 9740
