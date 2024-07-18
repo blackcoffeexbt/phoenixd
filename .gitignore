@@ -3,6 +3,7 @@ build/
 .cxx
 .docker/.env
 .docker/satdress-data/data/nwc.db
+.docker/satdress-data/config.yml
 .docker/phoenix-data/*
 
 # this file is local to the dev environment and must not be pushed!
