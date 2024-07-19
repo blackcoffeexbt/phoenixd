@@ -64,7 +64,10 @@ Get nwc connection string
 
 
 ## Generate some keys
-
+docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli keygen
 
 ## Get connection string
 docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
+
+## View satdress logs
+docker exec docker-phoenixd-1 tail -f logs/satdress.err
