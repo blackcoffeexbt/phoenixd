@@ -21,7 +21,9 @@ ENV GOPATH=/root/go
 ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 WORKDIR /satdress
-RUN git clone https://github.com/braydonf/satdress.git .
+RUN git clone https://github.com/blackcoffeexbt/satdress.git .
+RUN git fetch --all \
+    && git checkout phoenixd-get-payment-status
 RUN make \
     && mkdir -p /var/local/bin \
     && mv satdress /var/local/bin/satdress \
