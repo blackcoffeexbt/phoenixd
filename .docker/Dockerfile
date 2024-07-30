@@ -22,12 +22,12 @@ ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 WORKDIR /satdress
 RUN git clone https://github.com/braydonf/satdress.git .
-RUN make \
-    && mkdir -p /var/local/bin \
-    && mv satdress /var/local/bin/satdress \
-    && mv satdress-cli /var/local/bin/satdress-cli \
-    && chmod +x /var/local/bin/satdress-cli \
-    && chmod +x /var/local/bin/satdress
+RUN make
+RUN mkdir -p /var/local/bin
+RUN mv satdress /var/local/bin/satdress
+RUN mv satdress-cli /var/local/bin/satdress-cli
+RUN chmod +x /var/local/bin/satdress-cli
+RUN chmod +x /var/local/bin/satdress
 
 RUN ls -l /var/local/bin
 
