@@ -4,6 +4,7 @@ FROM eclipse-temurin:21-jdk-jammy AS BUILD
 # Set necessary args and environment variables for building phoenixd
 ARG PHOENIXD_BRANCH=v0.3.1
 ARG PHOENIXD_COMMIT_HASH=b735020e66daa01512e8fb2f47274b25916b207e
+ARG ARCH=amd64
 
 # Upgrade all packages and install dependencies
 RUN apt-get update \
@@ -11,8 +12,8 @@ RUN apt-get update \
 RUN apt-get install -y --no-install-recommends bash git make \
     && apt clean
 
-RUN wget https://go.dev/dl/go1.22.5.linux-amd64.tar.gz \
-&& tar -xvf go1.22.5.linux-amd64.tar.gz \
+RUN wget https://go.dev/dl/go1.22.5.linux-${ARCH}.tar.gz \
+&& tar -xvf go1.22.5.linux-${ARCH}.tar.gz \
 && mv go /usr/local
 
 # Set environment variables for Go
@@ -44,7 +45,7 @@ FROM eclipse-temurin:21-jre-alpine as FINAL
 # Upgrade all packages and install dependencies
 RUN apk update \
     && apk upgrade --no-interactive
-RUN apk add --update --no-cache bash openssh-client autossh
+RUN apk add --update --no-cache bash
 
 # Create a phoenix group and user
 RUN addgroup -S phoenix -g 1000 \

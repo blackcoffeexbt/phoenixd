@@ -2,7 +2,9 @@ services:
   phoenixd:
     build:
       context: .
-    restart: unless-stopped
+      args:
+        ARCH: amd64
+    restart: always
     ports:
       - "9740:9740"
     volumes:

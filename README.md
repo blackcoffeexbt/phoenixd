@@ -8,6 +8,40 @@
 **phoenixd** is the server equivalent of the popular [phoenix wallet](https://github.com/ACINQ/phoenix) for mobile.
 It is written in [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) and runs natively on Linux, MacOS (x86 and ARM), and Windows (WSL).
 
+## Nostr Wallet Connect Docker Container
+
+The Dockerfile in .docker creates a docker container that runs phoenixd and satdress to allow phoenixd as a nostr wallet connect service provider.
+
+### Instructions for use
+
+1. Open terminal and cd to .docker
+1. `mkdir phoenix-data`
+1. `sudo chmod 0777 -R phoenix-data`
+1. Build the container using docker compose `docker compose build`. If building on an arm64 host (i.e. a raspberry pi), use the build-arg `docker compose build --build-arg ARCH=arm64`.
+1. Start the container using `docker compose up -d`.
+
+## NWC configuration
+
+1. NWC connections are defined in the ./satdress/config.yml file.
+1. After updating the config file, restart the container using `docker compose restart`.
+
+### Useful Commands
+
+**NWC connection string**
+```shell
+/usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
+```
+
+**Generate some keys**
+```shell
+docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli keygen
+```
+
+**View satdress logs**
+```shell
+docker exec docker-phoenixd-1 tail -f logs/satdress.err
+```
+
 ## Build
 
 ### Native Linux/WSL
@@ -32,42 +66,3 @@ Requires `libsqlite-dev` and `libcurl4-gnutls-dev`, both compiled against `glibc
 ```shell
 ./gradlew distZip
 ```
-
-## Docker file with ssh tunnel to a remote server
-
-The Dockerfile in .docker creates a docker container that runs phoenixd and uses autossh to establish a reverse ssh tunnel to a remote server.
-
-### Instructions for use
-
-1. Open terminal and cd to .docker
-1. Copy .env.example to .env and update the vars accordingly
-1. `mkdir phoenix-data`
-1. `sudo chmod 0777 -R phoenix-data`
-1. Build and run the container using docker compose `docker compose up --build`
-1. The previous command will include the pubkey of your phoenixd docker container. Add this to the .ssh/authorized_hosts file of your ssh server.
-1. Stop the docker container by CTRL-Cing, then start the docker container with `docker compose up -d`.
-1. Get the http-password by running `docker exec docker-phoenixd cat .phoenix/phoenix.conf`
-
-#### LNbits
-If using LNbits, use this funding source by setting your LNbits funding source to
-
-PhoenixdWallet
-
-Endpoint: http://localhost:9740
-
-Key: The http-password value above
-
-## Other useful things
-
-Get nwc connection string
-/usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
-
-
-## Generate some keys
-docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli keygen
-
-## Get connection string
-docker exec docker-phoenixd-1 /usr/local/bin/satdress-cli --conf=.satdress/config.yml nwc connect-string --user=nwc
-
-## View satdress logs
-docker exec docker-phoenixd-1 tail -f logs/satdress.err
